@@ -1,0 +1,375 @@
+<?php
+// Set timezone ke WIB (Asia/Jakarta)
+date_default_timezone_set('Asia/Jakarta');
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Jam Analog WIB - Tema Laut</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom, #c7ecff, #5bb6e5, #0a3a5a);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+        }
+
+        /* Efek aliran air */
+        .water-flow {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08), transparent 60%);
+            animation: flow 25s linear infinite;
+        }
+
+        @keyframes flow {
+            0% { transform: translate(0,0); }
+            100% { transform: translate(-30%, -30%); }
+        }
+
+        /* Jam analog */
+        .clock-wrapper {
+            position: relative;
+            z-index: 2;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .clock-face {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid rgba(255,255,255,0.6);
+        }
+
+        .number {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 30px;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .number span {
+            display: block;
+            position: absolute;
+            top: 0.6%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .number:nth-child(1) { transform: rotate(0deg); }
+        .number:nth-child(2) { transform: rotate(30deg); }
+        .number:nth-child(3) { transform: rotate(60deg); }
+        .number:nth-child(4) { transform: rotate(90deg); }
+        .number:nth-child(5) { transform: rotate(120deg); }
+        .number:nth-child(6) { transform: rotate(150deg); }
+        .number:nth-child(7) { transform: rotate(180deg); }
+        .number:nth-child(8) { transform: rotate(210deg); }
+        .number:nth-child(9) { transform: rotate(240deg); }
+        .number:nth-child(10) { transform: rotate(270deg); }
+        .number:nth-child(11) { transform: rotate(300deg); }
+        .number:nth-child(12) { transform: rotate(330deg); }
+
+        .hand {
+            position: absolute;
+            height: 6px;
+            background: #ffffff;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 50%;
+            border-radius: 6px;
+            transition: transform 0s !important;
+            animation: none !important;
+        }
+
+        .hour {
+            width: 35%;
+            height: 8px;
+            background: #d4f1ff;
+            margin-top: -4px;
+        }
+
+        .minute {
+            width: 45%;
+            height: 6px;
+            background: #ffffff;
+            margin-top: -3px;
+        }
+
+        .second {
+            width: 48%;
+            height: 3px;
+            background: #ffb3b3;
+            margin-top: -1.5px;
+        }
+
+        .center-dot {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #ffffff;
+            border-radius: 50%;
+            z-index: 10;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .clock-accessory {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 8;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .label {
+            position: absolute;
+            bottom: -60px;
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        /* Bubbles animation */
+        .bubble {
+            position: absolute;
+            bottom: -50px;
+            animation: rise linear infinite;
+            pointer-events: none;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .bubble:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            left: 10%;
+            animation-duration: 4s;
+            background-image: url('bubble1.png');
+        }
+
+        .bubble:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            left: 25%;
+            animation-duration: 5s;
+            animation-delay: 0.5s;
+            background-image: url('bubble2.png');
+        }
+
+        .bubble:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            left: 40%;
+            animation-duration: 4.5s;
+            animation-delay: 1s;
+            background-image: url('bubble3.png');
+        }
+
+        .bubble:nth-child(4) {
+            width: 60px;
+            height: 60px;
+            left: 60%;
+            animation-duration: 5.5s;
+            animation-delay: 0.2s;
+            background-image: url('bubble1.png');
+        }
+
+        .bubble:nth-child(5) {
+            width: 48px;
+            height: 48px;
+            left: 75%;
+            animation-duration: 4s;
+            animation-delay: 1.5s;
+            background-image: url('bubble2.png');
+        }
+
+        .bubble:nth-child(6) {
+            width: 62px;
+            height: 62px;
+            left: 90%;
+            animation-duration: 5s;
+            animation-delay: 0.8s;
+            background-image: url('bubble3.png');
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -50px;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 100vh;
+                opacity: 0;
+            }
+        }
+
+        /* Rumput laut */
+        .seaweed {
+            position: absolute;
+            bottom: -10px;
+            width: 100%;
+            height: 200px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            z-index: 1;
+        }
+
+        .weed {
+            width: 18px;
+            height: 140px;
+            background: linear-gradient(to top, #0b5d3b, #3cb371);
+            border-radius: 20px 20px 0 0;
+            transform-origin: bottom center;
+            animation: sway 4s ease-in-out infinite;
+        }
+
+        .weed:nth-child(2) { animation-delay: 1s; height: 170px; }
+        .weed:nth-child(3) { animation-delay: 2s; height: 150px; }
+        .weed:nth-child(4) { animation-delay: 1.5s; height: 180px; }
+        .weed:nth-child(5) { animation-delay: 0.5s; height: 160px; }
+        .weed:nth-child(6) { animation-delay: 2.5s; height: 155px; }
+        .weed:nth-child(7) { animation-delay: 0.8s; height: 175px; }
+        .weed:nth-child(8) { animation-delay: 1.8s; height: 145px; }
+        .weed:nth-child(9) { animation-delay: 0.3s; height: 165px; }
+        .weed:nth-child(10) { animation-delay: 2.2s; height: 170px; }
+        .weed:nth-child(11) { animation-delay: 1.2s; height: 160px; }
+        .weed:nth-child(12) { animation-delay: 0.7s; height: 175px; }
+        .weed:nth-child(13) { animation-delay: 2.1s; height: 150px; }
+        .weed:nth-child(14) { animation-delay: 0.4s; height: 180px; }
+        .weed:nth-child(15) { animation-delay: 1.9s; height: 165px; }
+
+        @keyframes sway {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(7deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @media (max-width: 768px) {
+            .clock-wrapper {
+                width: 320px;
+                height: 320px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="water-flow"></div>
+
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <div class="clock-wrapper">
+        <div class="clock-face">
+            <div class="number"><span>12</span></div>
+            <div class="number"><span>1</span></div>
+            <div class="number"><span>2</span></div>
+            <div class="number"><span>3</span></div>
+            <div class="number"><span>4</span></div>
+            <div class="number"><span>5</span></div>
+            <div class="number"><span>6</span></div>
+            <div class="number"><span>7</span></div>
+            <div class="number"><span>8</span></div>
+            <div class="number"><span>9</span></div>
+            <div class="number"><span>10</span></div>
+            <div class="number"><span>11</span></div>
+            <div class="hand hour" id="hour"></div>
+            <div class="hand minute" id="minute"></div>
+            <div class="hand second" id="second"></div>
+            <div class="clock-accessory" style="background-image: url('fih.jpg');"></div>
+            <div class="center-dot"></div>
+        </div>
+    </div>
+
+    <div class="seaweed">
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+        <div class="weed"></div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Asia/Jakarta',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+
+            const parts = formatter.formatToParts(now);
+            const hours = parseInt(parts.find(p => p.type === 'hour').value);
+            const minutes = parseInt(parts.find(p => p.type === 'minute').value);
+            const seconds = parseInt(parts.find(p => p.type === 'second').value);
+
+            const secondDeg = seconds * 6 - 90;
+            const minuteDeg = minutes * 6 + seconds * 0.1 - 90;
+            const hourDeg = (hours % 12) * 30 + minutes * 0.5 - 90;
+
+            document.getElementById('second').style.transform = `rotate(${secondDeg}deg)`;
+            document.getElementById('minute').style.transform = `rotate(${minuteDeg}deg)`;
+            document.getElementById('hour').style.transform = `rotate(${hourDeg}deg)`;
+        }
+
+        // Force immediate update on page load before any rendering
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', updateClock);
+        } else {
+            updateClock();
+        }
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
